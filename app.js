@@ -1,6 +1,18 @@
 var express = require('express')
-  , http = require('http')
-  , path = require('path');
+    , http = require('http')
+    , path = require('path')
+    , path = require('path')
+    , mysql = require('mysql');
+
+var mySQLConfiguration = {
+    hostname:"localhost",
+    database:"my-db",
+    user: "root",
+    password: "",
+    port: "3306"
+};
+
+var mysqlConnection = mysql.createConnection(mySQLConfiguration);
 
 var app = express();
 
@@ -17,10 +29,26 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-
-// handles request to /
+// handles request (route: /)
 var indexHandler = function(req, res) {
-    res.send("hi there!");
+
+    var sql = 'SELECT * FROM test_table';
+
+    // mysql.query() function takes nestedTables as an option parameter
+    mysqlConnection.query({sql: sql, nestedTables: true }, function (err, rows) {
+
+        // error handling
+        if (err){
+            console.log('Internal error: ', err);
+            res.send("Mysql query execution error!");
+        }
+
+        else {
+            res.send(rows);
+        }
+
+    });
+
 }
 
 app.get('/', indexHandler);
