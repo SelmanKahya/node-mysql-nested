@@ -33,14 +33,19 @@ if ('development' == app.get('env')) {
 // handles request (route: /)
 var indexHandler = function(req, res) {
 
-    var sql = '' +
-        'SELECT * FROM company, company_type ' +
-        'WHERE company.company_type_id = company_type.company_type_id ' +
-        'AND company_id = 1';
+    var sql = 'SELECT * FROM company, company_type, improvement_plan, improvement_plan_type, goal';
+
+    var nestingOptions = [
+        { tableName : 'company', key: 'company_id'},
+        { tableName : 'company_type', key: 'company_type_id', hasForeignKeyToUpperTable: false},
+        { tableName : 'improvement_plan', key: 'improvement_plan_id'},
+        { tableName : 'improvement_plan_type', key: 'improvement_plan_type_id', hasForeignKeyToUpperTable: false},
+        { tableName : 'goal', key: 'goal_id'}
+    ]
 
     // mysql.query() function takes nestedTables as an option parameter.
     // for details, see: https://github.com/felixge/node-mysql#joins-with-overlapping-column-names
-    mysqlConnection.query({sql: sql, nestedTables: true }, function (err, rows) {
+    mysqlConnection.query({sql: sql, nestTables: true }, function (err, rows) {
 
         // error handling
         if (err){
@@ -49,7 +54,8 @@ var indexHandler = function(req, res) {
         }
 
         else {
-            res.send(rows);
+            var nestedRows = func.convertToNested(rows, nestingOptions);
+            res.send(JSON.stringify(nestedRows));
         }
 
     });
