@@ -3,7 +3,7 @@ var express = require('express')
     , path = require('path')
     , path = require('path')
     , mysql = require('mysql')
-    , func = require('./func.js');
+    , func = require('.././func.js');
 
 var mySQLConfiguration = {
     hostname:"localhost",
