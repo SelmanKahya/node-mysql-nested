@@ -33,7 +33,11 @@ if ('development' == app.get('env')) {
 // handles request (route: /)
 var indexHandler = function(req, res) {
 
-    var sql = 'SELECT * FROM company, company_type, improvement_plan, improvement_plan_type, goal';
+    var sql = 'SELECT * FROM company ' +
+        'LEFT  JOIN company_type ON company.company_type_id = company_type.company_type_id ' +
+        'LEFT JOIN improvement_plan ON company.company_id = improvement_plan.company_id ' +
+        'LEFT JOIN improvement_plan_type ON improvement_plan.improvement_plan_type_id = improvement_plan_type.improvement_plan_type_id ' +
+        'LEFT JOIN goal ON improvement_plan.improvement_plan_id = goal.improvement_plan_id ';
 
     var nestingOptions = [
         { tableName : 'company', key: 'company_id'},
