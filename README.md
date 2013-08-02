@@ -133,4 +133,4 @@ To illustrate how this function works, I included a simple application to the pa
 
 ## Contact
 
- - Selman Kahya - hey@selmanh.com
+ - Selman Kahya - ([website](http://www.selmanh.com)) - (hey@selmanh.com)
